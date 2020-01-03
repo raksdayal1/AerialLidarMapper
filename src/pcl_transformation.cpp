@@ -93,18 +93,26 @@ void PointTransform::DJIAtt_cb(const geometry_msgs::QuaternionStampedConstPtr &d
 
     tf::Transform body_transform(q, v);
 
+
     this->djibodyfixed_tfbroadcaster->sendTransform(tf::StampedTransform(body_transform,
                                                                          dji_att_msg->header.stamp,
                                                                          "/body_inertial",
                                                                          "/body_fixed"));
 
 
+    /*
+    this->djibodyfixed_tfbroadcaster->sendTransform(tf::StampedTransform(body_transform,
+                                                                         dji_att_msg->header.stamp,
+                                                                         "/body_fixed",
+                                                                         "/body_inertial"));
+    */
 }
 
 void PointTransform::LidarPC_cb(const sensor_msgs::PointCloud2ConstPtr &pc_msg)
 {
 
-    tf::Quaternion q1(tf::Vector3(0,0,1), M_PI), q2(tf::Vector3(0,1,0),-M_PI/2);
+    //tf::Quaternion q1(tf::Vector3(0,0,1), M_PI), q2(tf::Vector3(0,1,0),-M_PI/2);
+    tf::Quaternion q1(tf::Vector3(0,0,1), 0), q2(tf::Vector3(0,1,0),-M_PI/2);
     tf::Quaternion qFixed;
 
     qFixed = q1*q2;
@@ -117,6 +125,13 @@ void PointTransform::LidarPC_cb(const sensor_msgs::PointCloud2ConstPtr &pc_msg)
                                                                   "/body_fixed",
                                                                   "/os1_lidar"));
 
+    /*
+    this->lidar_tfbroadcaster->sendTransform(tf::StampedTransform(lidarTransform,
+                                                                  pc_msg->header.stamp,
+                                                                  "/os1_lidar",
+                                                                  "/body_fixed"));
+
+    */
 }
 
 void PointTransform::DJIGPS_InitLLA_cb(const sensor_msgs::NavSatFixConstPtr &dji_gps_msg)
@@ -187,12 +202,18 @@ void PointTransform::DJIGPS_cb(const sensor_msgs::NavSatFixConstPtr &dji_gps_msg
     tf::Transform inert_transform(qt,vt);
 
 
-
     this->djiinertial_tfbroadcaster->sendTransform(tf::StampedTransform(inert_transform,
                                                                         dji_gps_msg->header.stamp,
                                                                         "map",
                                                                         "/body_inertial"));
 
+/*
+    this->djiinertial_tfbroadcaster->sendTransform(tf::StampedTransform(inert_transform,
+                                                                        dji_gps_msg->header.stamp,
+                                                                        "/body_inertial",
+                                                                        "world"));
+
+*/
 }
 
 void PointTransform::LLA2ECEF(tf::Point LLA, tf::Point &ECEF){
