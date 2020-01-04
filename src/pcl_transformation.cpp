@@ -26,7 +26,7 @@ PointTransform::PointTransform(int argc, char **argv)
     this->long_avg = 0;
     this->alt_avg = 0;
 
-    cout <<"Averaging over "<< measure_len <<" measurements to set origin" << endl;
+    ROS_INFO_STREAM("Averaging over "<< measure_len <<" measurements to set origin");
 
     while (!this->GotReferenceLLA && ros::ok())
     {
@@ -40,7 +40,7 @@ PointTransform::PointTransform(int argc, char **argv)
             LLA0.setY(this->long_avg*(M_PI/180)/this->counter);
             LLA0.setZ(this->alt_avg/this->counter);
 
-            cout << "LLA origin set to Lat0 = " << LLA0.getX() << ", Lon0 = " << LLA0.getY() << ", Alt0 = " << LLA0.getZ() << endl;
+            ROS_INFO_STREAM("LLA origin set to Lat0 = " << LLA0.getX() << ", Lon0 = " << LLA0.getY() << ", Alt0 = " << LLA0.getZ());
 
             LLA2ECEF(LLA0, this->ECEF0);
 
@@ -85,9 +85,9 @@ void PointTransform::DJIAtt_cb(const geometry_msgs::QuaternionStampedConstPtr &d
 
     m.getRPY(roll, pitch, yaw);
 
-    cout << "Roll = " << roll*180/M_PI << endl;
-    cout << "Pitch = " << pitch*180/M_PI << endl;
-    cout << "Yaw = " << yaw*180/M_PI << endl;
+    //cout << "Roll = " << roll*180/M_PI << endl;
+    //cout << "Pitch = " << pitch*180/M_PI << endl;
+    //cout << "Yaw = " << yaw*180/M_PI << endl;
 
     tf::Vector3 v(0,0,0);
 
@@ -136,7 +136,7 @@ void PointTransform::LidarPC_cb(const sensor_msgs::PointCloud2ConstPtr &pc_msg)
 
 void PointTransform::DJIGPS_InitLLA_cb(const sensor_msgs::NavSatFixConstPtr &dji_gps_msg)
 {
-    cout <<"Got " << this->counter <<" gps measurements." << endl;
+    ROS_INFO_STREAM("Got " << this->counter <<" gps measurements." );
 
     this->lat_avg += dji_gps_msg->latitude;
     this->long_avg += dji_gps_msg->longitude;

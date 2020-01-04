@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   tf
+  pcl_ros
 )
 
 find_package(PCL 1.3 REQUIRED COMPONENTS common io)
@@ -131,6 +132,10 @@ include_directories(
 set(TRANSFORM pctransform)
 add_executable(${TRANSFORM}_node src/pcl_transformation.cpp src/pcl_transformation_ros.cpp)
 target_link_libraries(${TRANSFORM}_node ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+
+set(MAP mapper)
+add_executable(${MAP}_node src/mapper.cpp src/mapper_ros.cpp)
+target_link_libraries(${MAP}_node ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
 #add_executable(${PROJECT_NAME}_node src/PCTransformation.cpp src/PCTransformation_ros.cpp)
 #target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES} ${PCL_LIBRARIES})
